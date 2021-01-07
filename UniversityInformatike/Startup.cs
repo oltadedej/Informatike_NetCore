@@ -17,6 +17,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using UniversityDb_Infor.DAL;
+using UniversityInformatike.DPI;
+using UniversityInformatike.DPI;
 
 namespace UniversityInformatike
 {
@@ -32,6 +34,12 @@ namespace UniversityInformatike
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //konfigurimi i services
+            services.AddServices();
+            //konfigure cache properties
+            services.ConfigureOptions(Configuration);
+
+
             services.AddControllers();
             //konfigurimi i automapperit
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
