@@ -51,7 +51,8 @@ namespace UniversityInformatike.Controllers
         //, [FromServices] StaticCache staticCache
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudentModel>>> Get([FromQuery] StudentSearchCriteria studentSearchCriteria, [FromServices] StaticCache staticCache)
+        public async Task<ActionResult<IEnumerable<StudentModel>>> Get([FromQuery] StudentSearchCriteria studentSearchCriteria, 
+            [FromServices] StaticCache staticCache)
         {
             _logger.LogInformation("Test cache methods ");
             ApplicationsAuthorized application = null;
