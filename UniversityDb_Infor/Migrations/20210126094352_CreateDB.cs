@@ -11,20 +11,21 @@ namespace UniversityDb_Infor.Migrations
                 name: "Course",
                 columns: table => new
                 {
-                    IdCourse = table.Column<int>(type: "int", nullable: false)
+                    CourseId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CourseTitle = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    CourseTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Credits = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Course", x => x.IdCourse);
+                    table.PrimaryKey("PK_Course", x => x.CourseId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Student",
                 columns: table => new
                 {
-                    IdStudenti = table.Column<int>(type: "int", nullable: false)
+                    StudentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Emer = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Mbiemer = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -32,47 +33,45 @@ namespace UniversityDb_Infor.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Student", x => x.IdStudenti);
+                    table.PrimaryKey("PK_Student", x => x.StudentId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Enrollment",
                 columns: table => new
                 {
-                    IdEnrollment = table.Column<int>(type: "int", nullable: false)
+                    EnrollmentId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdStudent = table.Column<int>(type: "int", nullable: false),
-                    IdCourse = table.Column<int>(type: "int", nullable: false),
-                    Grade = table.Column<int>(type: "int", nullable: true),
-                    StudentIdStudenti = table.Column<int>(type: "int", nullable: true),
-                    CourseIdCourse = table.Column<int>(type: "int", nullable: true)
+                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    Grade = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Enrollment", x => x.IdEnrollment);
+                    table.PrimaryKey("PK_Enrollment", x => x.EnrollmentId);
                     table.ForeignKey(
-                        name: "FK_Enrollment_Course_CourseIdCourse",
-                        column: x => x.CourseIdCourse,
+                        name: "FK_Enrollment_Course_CourseId",
+                        column: x => x.CourseId,
                         principalTable: "Course",
-                        principalColumn: "IdCourse",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "CourseId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Enrollment_Student_StudentIdStudenti",
-                        column: x => x.StudentIdStudenti,
+                        name: "FK_Enrollment_Student_StudentId",
+                        column: x => x.StudentId,
                         principalTable: "Student",
-                        principalColumn: "IdStudenti",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "StudentId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_CourseIdCourse",
+                name: "IX_Enrollment_CourseId",
                 table: "Enrollment",
-                column: "CourseIdCourse");
+                column: "CourseId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Enrollment_StudentIdStudenti",
+                name: "IX_Enrollment_StudentId",
                 table: "Enrollment",
-                column: "StudentIdStudenti");
+                column: "StudentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

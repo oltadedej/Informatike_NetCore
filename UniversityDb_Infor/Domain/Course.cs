@@ -10,8 +10,9 @@ namespace UniversityDb_Infor.Domain
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdCourse { get; set; }
+        public int CourseId { get; set; }
         public string CourseTitle { get; set; }
+        public int Credits { get; set; }
 
         public ICollection<Enrollment> Enrollments { get; set; }
 

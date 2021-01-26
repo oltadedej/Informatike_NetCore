@@ -10,7 +10,7 @@ namespace UniversityDb_Infor.Domain
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-       public int IdStudenti { get; set; }
+       public int StudentId { get; set; }
        public string Emer { get; set; }
        public String Mbiemer { get; set; }
        public DateTime EnrollmentDate { get; set;}

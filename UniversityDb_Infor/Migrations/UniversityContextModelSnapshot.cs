@@ -21,7 +21,7 @@ namespace UniversityDb_Infor.Migrations
 
             modelBuilder.Entity("UniversityDb_Infor.Domain.Course", b =>
                 {
-                    b.Property<int>("IdCourse")
+                    b.Property<int>("CourseId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
@@ -29,45 +29,42 @@ namespace UniversityDb_Infor.Migrations
                     b.Property<string>("CourseTitle")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdCourse");
+                    b.Property<int>("Credits")
+                        .HasColumnType("int");
+
+                    b.HasKey("CourseId");
 
                     b.ToTable("Course");
                 });
 
             modelBuilder.Entity("UniversityDb_Infor.Domain.Enrollment", b =>
                 {
-                    b.Property<int>("IdEnrollment")
+                    b.Property<int>("EnrollmentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int?>("CourseIdCourse")
+                    b.Property<int>("CourseId")
                         .HasColumnType("int");
 
                     b.Property<int?>("Grade")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdCourse")
+                    b.Property<int>("StudentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdStudent")
-                        .HasColumnType("int");
+                    b.HasKey("EnrollmentId");
 
-                    b.Property<int?>("StudentIdStudenti")
-                        .HasColumnType("int");
+                    b.HasIndex("CourseId");
 
-                    b.HasKey("IdEnrollment");
-
-                    b.HasIndex("CourseIdCourse");
-
-                    b.HasIndex("StudentIdStudenti");
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Enrollment");
                 });
 
             modelBuilder.Entity("UniversityDb_Infor.Domain.Student", b =>
                 {
-                    b.Property<int>("IdStudenti")
+                    b.Property<int>("StudentId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
@@ -81,24 +78,28 @@ namespace UniversityDb_Infor.Migrations
                     b.Property<string>("Mbiemer")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdStudenti");
+                    b.HasKey("StudentId");
 
                     b.ToTable("Student");
                 });
 
             modelBuilder.Entity("UniversityDb_Infor.Domain.Enrollment", b =>
                 {
-                    b.HasOne("UniversityDb_Infor.Domain.Course", "Course")
+                    b.HasOne("UniversityDb_Infor.Domain.Course", "course")
                         .WithMany("Enrollments")
-                        .HasForeignKey("CourseIdCourse");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("UniversityDb_Infor.Domain.Student", "Student")
+                    b.HasOne("UniversityDb_Infor.Domain.Student", "student")
                         .WithMany("Enrollments")
-                        .HasForeignKey("StudentIdStudenti");
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Course");
+                    b.Navigation("course");
 
-                    b.Navigation("Student");
+                    b.Navigation("student");
                 });
 
             modelBuilder.Entity("UniversityDb_Infor.Domain.Course", b =>

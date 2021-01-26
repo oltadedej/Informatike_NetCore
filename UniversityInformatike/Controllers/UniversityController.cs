@@ -19,11 +19,11 @@ using UniversityDb_Infor.Utils;
 
 namespace UniversityInformatike.Controllers
 {
-   
-        [Route("api/University")]
-        [ApiController]
-        public class UniversityController : ControllerBase
-        {
+
+    [Route("api/University")]
+    [ApiController]
+    public class UniversityController : ControllerBase
+    {
 
         #region Private Fields
 
@@ -51,7 +51,7 @@ namespace UniversityInformatike.Controllers
         //, [FromServices] StaticCache staticCache
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<StudentModel>>> Get([FromQuery] StudentSearchCriteria studentSearchCriteria, 
+        public async Task<ActionResult<IEnumerable<StudentModel>>> Get([FromQuery] StudentSearchCriteria studentSearchCriteria,
             [FromServices] StaticCache staticCache)
         {
             _logger.LogInformation("Test cache methods ");
@@ -118,7 +118,7 @@ namespace UniversityInformatike.Controllers
             StudentModel studentReturn = await _serviceUniversityDB.CreateStudentAsync(Student);
             if (studentReturn != null)
             {
-                return CreatedAtRoute("GetStudent", new { id = studentReturn.IdStudenti }, studentReturn);
+                return CreatedAtRoute("GetStudent", new { id = studentReturn.StudentId }, studentReturn);
             }
             return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
         }
@@ -157,5 +157,43 @@ namespace UniversityInformatike.Controllers
             }
             return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
         }
+
+        /// <summary>
+        /// Get couse detail that has the maximum of enrollment beetween two dates
+        /// </summary>
+        /// <param name="d1"></param>
+        /// <param name="d2"></param>
+        /// <returns></returns>
+        [HttpGet("/course", Name = "GetCourseWithMaximumEnrollmentForDefinedDates")]
+        public async Task<ActionResult<CourseModel>> GetCourseWithMaximumEnrollmentForDefinedDates(DateTime d1, DateTime d2)
+        {
+            if (d1 == DateTime.MinValue || d2 == DateTime.MinValue)
+            {
+                return BadRequest($"Dates are not valid");
+            }
+
+            CourseModel course = await _serviceUniversityDB.MaximumCourse(d1, d2);
+            if (course != null)
+            {
+                return Ok(course);
+            }
+            return NotFound($"Dates are not valid");
+        }
+
+        /// <summary>
+        /// Get course details that has the maximum enrollments
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/course/maximum", Name = "GetCourseWithMaximumEnrollment")]
+        public async Task<ActionResult<CourseModel>> GetCourseWithMaximumEnrollment()
+        {
+
+            CourseModel course = await _serviceUniversityDB.MaximumEnrollmentForAllTimes();
+            if (course != null)
+            {
+                return Ok(course);
+            }
+            return NoContent();
+        }
     }
-    }
+}

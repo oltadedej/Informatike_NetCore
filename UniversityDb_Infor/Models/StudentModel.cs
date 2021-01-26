@@ -7,7 +7,7 @@ namespace UniversityDb_Infor.Models
 {
    public class StudentModel
     {
-        public int IdStudenti { get; set; }
+        public int StudentId { get; set; }
         public string Emer { get; set; }
         public String Mbiemer { get; set; }
 

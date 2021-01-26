@@ -8,8 +8,8 @@ namespace UniversityDb_Infor.Models
     {
         public int IdEnrollment { get; set; }
 
-        public int IdStudent { get; set; }
-        public int IdCourse { get; set; }
+        public int StudentId { get; set; }
+        public int CourseId { get; set; }
         public int? Grade { get; set; }
 
     }
