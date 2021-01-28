@@ -182,12 +182,16 @@ namespace UniversityDb_Infor.Services
 
         public async Task<CourseModel> CallDBUsingCMD()
         {
+            // Inital Catalog eshte emri i bazes se te dhenave
+            //data source eshte emri i serverit
+            //integrated security= SSPI/ TRUE --> logim me windows authentication
 
             string ConString = "data source=.; database=StudentDB; integrated security=SSPI";
             using (SqlConnection connection = new SqlConnection(ConString))
             {
-                SqlCommand cmd = new SqlCommand("queryto_execute", connection);
                 connection.Open();
+                string query = "Select * from students";
+                SqlCommand cmd = new SqlCommand("query_to_execute", connection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 DataTable Dt = new DataTable();
                 adapter.Fill(Dt);
@@ -195,7 +199,7 @@ namespace UniversityDb_Infor.Services
                 {
                     CourseId = Convert.ToInt32(row["CourseId"]),
                     CourseTitle = Convert.ToString(row["CourseTitle"]),
-                    Credits = Convert.ToInt32(row["CourseTitle"]),
+                    Credits = Convert.ToInt32(row["Credits"]),
 
                 }).FirstOrDefault();
 
@@ -203,7 +207,6 @@ namespace UniversityDb_Infor.Services
                 connection.Close();
                 return _mapper.Map<CourseModel>(course);
             }
-
 
         }
 

@@ -177,7 +177,8 @@ namespace UniversityInformatike.Controllers
             {
                 return Ok(course);
             }
-            return NotFound($"Dates are not valid");
+           // return NotFound($"Dates are not valid");
+               return NoContent();
         }
 
         /// <summary>
