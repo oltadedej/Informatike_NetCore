@@ -19,5 +19,7 @@ namespace UniversityDb_Infor.Services.Contract
 
         Task<CourseModel> MaximumCourse(DateTime dt1, DateTime dt2);
         Task<CourseModel> MaximumEnrollmentForAllTimes();
+        Task<StudentModel> MaximumStudentCredits();
+        Task<IEnumerable<CourseModel>> CurseTeKaluaraPerStudent(int std);
     }
 }

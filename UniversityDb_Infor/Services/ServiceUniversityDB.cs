@@ -18,7 +18,7 @@ using Utf8Json;
 
 namespace UniversityDb_Infor.Services
 {
-   public class ServiceUniversityDB :  BaseService<ServiceUniversityDB>, IServiceUniversityDB
+    public class ServiceUniversityDB : BaseService<ServiceUniversityDB>, IServiceUniversityDB
     {
         private readonly string ServiceName = nameof(ServiceUniversityDB);
         private readonly string ModelName = "University";
@@ -165,6 +165,47 @@ namespace UniversityDb_Infor.Services
             return _mapper.Map<CourseModel>(finalresults);
 
         }
+
+        public async Task<StudentModel> MaximumStudentCredits()
+        {
+
+            //join  tables using linq
+            var result = from course in _dbContext.Course
+                         join enrollment in _dbContext.Enrollment on course.CourseId equals enrollment.CourseId
+                         select new { course.CourseId, enrollment.StudentId, course.CourseTitle, enrollment.Grade, course.Credits } into intermediate
+                         join student in _dbContext.Student on intermediate.StudentId equals student.StudentId
+                         where intermediate.Grade > 4
+                         group intermediate by intermediate.StudentId into g
+                         select new { studentId = g.Key, MaximumStudentCredits = g.Sum(i => i.Credits) };
+
+            var id_student = result.ToList().OrderByDescending(x => x.MaximumStudentCredits).Select(i => i.studentId).FirstOrDefault();
+            var finalresults = _dbContext.Student.Where(i => i.StudentId == id_student).FirstOrDefault();
+            return _mapper.Map<StudentModel>(finalresults);
+
+        }
+
+      
+        public async Task<IEnumerable<CourseModel>> CurseTeKaluaraPerStudent(int std)
+        {
+            IQueryable<Course> query = from course in _dbContext.Course
+                                       join enrollment in _dbContext.Enrollment on course.CourseId equals enrollment.CourseId
+                                       where enrollment.Grade > 4 && enrollment.StudentId == std
+                                       select course;
+
+            List<Course> courses = await query.ToListAsync();
+            if (!courses.IsNullOrEmpty())
+            {
+                return _mapper.Map<IEnumerable<CourseModel>>(courses);
+            }
+            else
+            {
+                _logger.LogWarning($"No result found.");
+            }
+            return null;
+        }
+
+
+
         public async Task<CourseModel> MaximumEnrollmentForAllTimes()
         {
 
@@ -210,23 +251,6 @@ namespace UniversityDb_Infor.Services
 
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+       
     }
 }
